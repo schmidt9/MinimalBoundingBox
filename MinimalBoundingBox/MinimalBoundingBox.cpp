@@ -128,12 +128,12 @@ namespace minimal_bounding_box {
         auto hullPoints = std::vector<Point>(sortedPoints.size() * 2);
 
         auto pointLength = sortedPoints.size();
-        auto counter = 0UL;
+        auto counter = 0;
 
         // iterate for lowerHull
 
         for (int i = 0; i < pointLength; ++i) {
-            while (counter >= 2 && cross(hullPoints [counter - 2], hullPoints [counter - 1], sortedPoints [i]) <= 0) {
+            while (counter >= 2 && cross(hullPoints[counter - 2], hullPoints[counter - 1], sortedPoints[i]) <= 0) {
                 counter--;
             }
 

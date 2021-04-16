@@ -22,6 +22,14 @@ namespace minimal_bounding_box {
             double x = 0;
             double y = 0;
 
+            Point(){}
+
+            Point(double x, double y)
+            {
+                this->x = x;
+                this->y = y;
+            }
+
             inline Point operator - (const Point &other) const
             {
                 return {this->x - other.x, this->y - other.y};
@@ -62,6 +70,16 @@ namespace minimal_bounding_box {
             getArea()
             {
                 return size.x * size.y;
+            }
+
+            std::vector<Point> getPoints()
+            {
+                return {
+                    {location.x, location.y},
+                    {location.x + size.x, location.y},
+                    {location.x + size.x, location.y + size.y},
+                    {location.x, location.y + size.y}
+                };
             }
 
         };

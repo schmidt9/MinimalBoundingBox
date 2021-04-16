@@ -6,12 +6,17 @@
 //
 
 #import "DrawingView.h"
+#import "MinimalBoundingBox.hpp"
+
+using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
+
 
 @implementation DrawingView
 {
     NSMutableArray<NSValue *> *_points;
+    NSMutableArray<NSValue *> *_boundingBoxPoints;
 }
 
 - (void)awakeFromNib
@@ -38,11 +43,27 @@ const CGFloat kPointSize = 10.0;
         UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:pointRect];
         [path fill];
     }
+
+    [UIColor.greenColor setFill];
+    UIBezierPath *path = [UIBezierPath new];
+
+    for (NSValue *value in _boundingBoxPoints) {
+        CGPoint point = value.CGPointValue;
+
+        if (value == _boundingBoxPoints.firstObject) {
+            [path moveToPoint:point];
+        } else {
+            [path addLineToPoint:point];
+        }
+    }
+
+    [path stroke];
 }
 
 - (void)calculateMinimalBoundingBox
 {
     [self generateRandomPoints];
+    [self calculateBoundingBox];
     [self setNeedsDisplay];
 }
 
@@ -57,6 +78,24 @@ const CGFloat kPointSize = 10.0;
         CGFloat y = arc4random_uniform((uint32_t)height);
         CGPoint point = CGPointMake(x, y);
         [_points addObject:[NSValue valueWithCGPoint:point]];
+    }
+}
+
+- (void)calculateBoundingBox
+{
+    std::vector<MinimalBoundingBox::Point> cppPoints;
+
+    for (NSValue *value in _points) {
+        CGPoint point = value.CGPointValue;
+        auto cppPoint = MinimalBoundingBox::Point(point.x, point.y);
+        cppPoints.push_back(cppPoint);
+    }
+
+    auto cppBoundingBoxPoints = MinimalBoundingBox::calculate(cppPoints).getPoints();
+
+    for (auto &cppPoint : cppBoundingBoxPoints) {
+        CGPoint point = CGPointMake(cppPoint.x, cppPoint.y);
+        [_boundingBoxPoints addObject:[NSValue valueWithCGPoint:point]];
     }
 }
 
