@@ -51,9 +51,9 @@ namespace minimal_bounding_box {
                 auto rotatedPoint = rotateToXAxis(p, angle);
 
                 top = std::max(top, rotatedPoint.y);
-                bottom = std::max(bottom, rotatedPoint.y);
+                bottom = std::min(bottom, rotatedPoint.y);
 
-                left = std::max(left, rotatedPoint.x);
+                left = std::min(left, rotatedPoint.x);
                 right = std::max(right, rotatedPoint.x);
             }
 
