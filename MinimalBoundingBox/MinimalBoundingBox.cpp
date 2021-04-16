@@ -123,7 +123,7 @@ namespace minimal_bounding_box {
             return (p1.x < p2.x);
         });
 
-        auto hullPoints = std::vector<Point>(sortedPoints.size());
+        auto hullPoints = std::vector<Point>(sortedPoints.size() * 2);
 
         auto pointLength = sortedPoints.size();
         auto counter = 0;
