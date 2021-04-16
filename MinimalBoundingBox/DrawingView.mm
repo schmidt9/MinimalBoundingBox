@@ -11,12 +11,15 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
+const int kPointsCount = 15;
 
 
 @implementation DrawingView
 {
     NSMutableArray<NSValue *> *_points;
     NSMutableArray<NSValue *> *_boundingBoxPoints;
+    NSMutableArray<NSValue *> *_hullPoints;
+    CGRect _pointsDrawingRect;
 }
 
 - (void)awakeFromNib
@@ -29,6 +32,12 @@ const CGFloat kPointSize = 10.0;
 
 - (void)drawRect:(CGRect)rect
 {
+    // points drawing rect
+
+    [UIColor.blueColor setStroke];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:_pointsDrawingRect];
+    [path stroke];
+
     // draw points
 
     [UIColor.magentaColor setFill];
@@ -40,17 +49,34 @@ const CGFloat kPointSize = 10.0;
             point.y - kPointSize / 2,
             kPointSize,
             kPointSize);
-        UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:pointRect];
+        path = [UIBezierPath bezierPathWithOvalInRect:pointRect];
         [path fill];
     }
 
-    [UIColor.greenColor setFill];
-    UIBezierPath *path = [UIBezierPath new];
+    // draw bounding box
+
+    [UIColor.greenColor setStroke];
+    path = [UIBezierPath new];
 
     for (NSValue *value in _boundingBoxPoints) {
         CGPoint point = value.CGPointValue;
 
         if (value == _boundingBoxPoints.firstObject) {
+            [path moveToPoint:point];
+        } else {
+            [path addLineToPoint:point];
+        }
+    }
+
+    // draw hull path
+
+    [UIColor.darkGrayColor setStroke];
+    path = [UIBezierPath new];
+
+    for (NSValue *value in _hullPoints) {
+        CGPoint point = value.CGPointValue;
+
+        if (value == _hullPoints.firstObject) {
             [path moveToPoint:point];
         } else {
             [path addLineToPoint:point];
@@ -69,13 +95,16 @@ const CGFloat kPointSize = 10.0;
 
 - (void)generateRandomPoints
 {
-    CGFloat width = self.frame.size.width;
-    CGFloat height = self.frame.size.height;
+    CGFloat margin = self.frame.size.width / 5;
+    CGFloat drawingWidth = self.frame.size.width - margin * 2;
+    CGFloat drawingHeight = self.frame.size.height - margin * 2;
+
+    _pointsDrawingRect = CGRectMake(margin, margin, drawingWidth, drawingHeight);
     _points = [NSMutableArray new];
 
-    for (int i = 0; i < 10; ++i) {
-        CGFloat x = arc4random_uniform((uint32_t)width);
-        CGFloat y = arc4random_uniform((uint32_t)height);
+    for (int i = 0; i < kPointsCount; ++i) {
+        CGFloat x = arc4random_uniform((uint32_t)drawingWidth) + margin;
+        CGFloat y = arc4random_uniform((uint32_t)drawingHeight) + margin;
         CGPoint point = CGPointMake(x, y);
         [_points addObject:[NSValue valueWithCGPoint:point]];
     }
@@ -91,11 +120,27 @@ const CGFloat kPointSize = 10.0;
         cppPoints.push_back(cppPoint);
     }
 
-    auto cppBoundingBoxPoints = MinimalBoundingBox::calculate(cppPoints).getPoints();
+    auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints);
+    auto cppBoundingBoxPoints = cppBoundingBox.rect.getPoints();
+
+    NSLog(@"%@", NSStringFromCGRect(self.frame));
+
+    _boundingBoxPoints = [NSMutableArray new];
 
     for (auto &cppPoint : cppBoundingBoxPoints) {
         CGPoint point = CGPointMake(cppPoint.x, cppPoint.y);
         [_boundingBoxPoints addObject:[NSValue valueWithCGPoint:point]];
+        NSLog(@"%@", NSStringFromCGPoint(point));
+    }
+
+    _hullPoints = [NSMutableArray new];
+    auto cppHullPoints = cppBoundingBox.hullPoints;
+    NSLog(@"HULL POINTS");
+
+    for (auto &cppPoint : cppHullPoints) {
+        CGPoint point = CGPointMake(cppPoint.x, cppPoint.y);
+        [_hullPoints addObject:[NSValue valueWithCGPoint:point]];
+        NSLog(@"%@", NSStringFromCGPoint(point));
     }
 }
 
