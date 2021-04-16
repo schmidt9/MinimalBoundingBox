@@ -5,86 +5,172 @@
 #include <float.h>
 #include "MinimalBoundingBox.hpp"
 
-// MARK: Utils
+namespace minimal_bounding_box {
 
-/**
- * Cross the specified o, a and b.
- * Zero if collinear
- * Positive if counter-clockwise
- * Negative if clockwise
- * @param o 0
- * @param a The alpha component
- * @param b The blue component
- */
-double cross(
-    const MinimalBoundingBox::Point &o,
-    const MinimalBoundingBox::Point &a,
-    const MinimalBoundingBox::Point &b)
-{
-    return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
-}
+    /**
+     * Calculates the minimum bounding box
+     */
+    MinimalBoundingBox::Rect
+    MinimalBoundingBox::calculate(const std::vector<Point> &points)
+    {
+        // calculate the convex hull
 
-bool isDoubleEqual(double v1, double v2)
-{
-    return std::abs(v1 - v2) < DBL_EPSILON;
-}
+        auto hullPoints = monotoneChainConvexHull(points);
 
-// MARK: Bounding Box
+        // check if no bounding box available
 
-std::vector<MinimalBoundingBox::Point>
-monotoneChainConvexHull(const std::vector<MinimalBoundingBox::Point> &points)
-{
-    using Point = MinimalBoundingBox::Point;
+        if (hullPoints.size() <= 1) {
+            return {};
+        }
 
-    // break if only one point as input
-    if (points.size() <= 1) {
-        return points;
-    }
+        Rect minBox;
+        double minAngle = 0;
 
-    auto sortedPoints = points;
+        for (int i = 0; i < hullPoints.size(); ++i) {
+            auto nextIndex = i + 1;
 
-    // sort vectors
-    std::sort(sortedPoints.begin(), sortedPoints.end(), [](const Point &p1, const Point &p2) -> bool {
-        // https://github.com/cansik/LongLiveTheSquare/blob/master/U4LongLiveTheSquare/Geometry/Vector2d.cs
-        if (isDoubleEqual(p1.x, p2.x)) {
-            if (isDoubleEqual(p1.y, p2.y)) {
-                return false;
+            auto current = hullPoints[i];
+            auto next = hullPoints[nextIndex % hullPoints.size()];
+
+            auto segment = Segment(current, next);
+
+            // min / max points
+
+            auto top = DBL_MIN;
+            auto bottom = DBL_MAX;
+            auto left = DBL_MAX;
+            auto right = DBL_MIN;
+
+            // get angle of segment to x axis
+
+            auto angle = angleToAxis(segment);
+
+            // rotate every point and get min and max values for each direction
+
+            for (auto &p : hullPoints) {
+                auto rotatedPoint = rotateToXAxis(p, angle);
+
+                top = std::max(top, rotatedPoint.y);
+                bottom = std::max(bottom, rotatedPoint.y);
+
+                left = std::max(left, rotatedPoint.x);
+                right = std::max(right, rotatedPoint.x);
             }
 
-            return (p1.y < p2.y);
+            // create axis aligned bounding box
+
+            auto box = Rect({left, bottom}, {right, top});
+
+            if (minBox.isEmpty() || minBox.getArea() > box.getArea()) {
+                minBox = box;
+                minAngle = angle;
+            }
+
+            // rotate axis aligned box back
+
+            auto minimalBoundingBox = Rect(
+                rotateToXAxis(minBox.location, -minAngle),
+                rotateToXAxis(minBox.size, -minAngle));
+
+            return minimalBoundingBox;
         }
 
-        return (p1.x < p2.x);
-    });
-
-    auto hullPoints = std::vector<Point>(sortedPoints.size() * 2);
-
-    auto pointLength = sortedPoints.size();
-    auto counter = 0UL;
-
-    // iterate for lowerHull
-
-    for (int i = 0; i < pointLength; ++i) {
-        while (counter >= 2 && cross(hullPoints [counter - 2], hullPoints [counter - 1], sortedPoints [i]) <= 0) {
-            counter--;
-        }
-
-        hullPoints[counter++] = sortedPoints[i];
+        return {};
     }
 
-    // iterate for upperHull
+    // MARK: Utils
 
-    for (unsigned long i = pointLength - 2, j = counter + 1; i >= 0; i--) {
-        while (counter >= j && cross(hullPoints[counter - 2], hullPoints[counter - 1], sortedPoints[i]) <= 0) {
-            counter--;
-        }
-
-        hullPoints[counter++] = sortedPoints[i];
+    /**
+     * Cross the specified o, a and b.
+     * Zero if collinear
+     * Positive if counter-clockwise
+     * Negative if clockwise
+     * @param o 0
+     * @param a The alpha component
+     * @param b The blue component
+     */
+    double
+    MinimalBoundingBox::cross(const Point &o, const Point &a, const Point &b)
+    {
+        return (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
     }
 
-    // remove duplicate start points
+    bool
+    MinimalBoundingBox::isDoubleEqual(double v1, double v2)
+    {
+        return std::abs(v1 - v2) < DBL_EPSILON;
+    }
 
-    hullPoints.erase(hullPoints.end() - 1);
+    std::vector<MinimalBoundingBox::Point>
+    MinimalBoundingBox::monotoneChainConvexHull(const std::vector<MinimalBoundingBox::Point> &points)
+    {
+        // break if only one point as input
+        if (points.size() <= 1) {
+            return points;
+        }
 
-    return hullPoints;
+        auto sortedPoints = points;
+
+        // sort vectors
+        std::sort(sortedPoints.begin(), sortedPoints.end(), [&](const Point &p1, const Point &p2) -> bool {
+            // https://github.com/cansik/LongLiveTheSquare/blob/master/U4LongLiveTheSquare/Geometry/Vector2d.cs
+            if (isDoubleEqual(p1.x, p2.x)) {
+                if (isDoubleEqual(p1.y, p2.y)) {
+                    return false;
+                }
+
+                return (p1.y < p2.y);
+            }
+
+            return (p1.x < p2.x);
+        });
+
+        auto hullPoints = std::vector<Point>(sortedPoints.size() * 2);
+
+        auto pointLength = sortedPoints.size();
+        auto counter = 0UL;
+
+        // iterate for lowerHull
+
+        for (int i = 0; i < pointLength; ++i) {
+            while (counter >= 2 && cross(hullPoints [counter - 2], hullPoints [counter - 1], sortedPoints [i]) <= 0) {
+                counter--;
+            }
+
+            hullPoints[counter++] = sortedPoints[i];
+        }
+
+        // iterate for upperHull
+
+        for (unsigned long i = pointLength - 2, j = counter + 1; i >= 0; i--) {
+            while (counter >= j && cross(hullPoints[counter - 2], hullPoints[counter - 1], sortedPoints[i]) <= 0) {
+                counter--;
+            }
+
+            hullPoints[counter++] = sortedPoints[i];
+        }
+
+        // remove duplicate start points
+
+        hullPoints.erase(hullPoints.end() - 1);
+
+        return hullPoints;
+    }
+
+    double
+    MinimalBoundingBox::angleToAxis(const Segment &s)
+    {
+        auto delta = s.a - s.b;
+        return atan(delta.y / delta.x);
+    }
+
+    MinimalBoundingBox::Point
+    MinimalBoundingBox::rotateToXAxis(const Point &p, double angle)
+    {
+        auto newX = p.x * cos(angle) - p.y * sin(angle);
+        auto newY = p.x * sin(angle) + p.y * cos(angle);
+        return {newX, newY};
+    }
+
 }
+
