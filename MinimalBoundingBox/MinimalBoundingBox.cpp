@@ -43,7 +43,7 @@ namespace minimal_bounding_box {
 
             // get angle of segment to x axis
 
-            auto angle = angleToAxis(segment);
+            auto angle = angleToXAxis(segment);
 
             // rotate every point and get min and max values for each direction
 
@@ -65,17 +65,15 @@ namespace minimal_bounding_box {
                 minBox = box;
                 minAngle = angle;
             }
-
-            // rotate axis aligned box back
-
-            auto minimalBoundingBox = Rect(
-                rotateToXAxis(minBox.location, -minAngle),
-                rotateToXAxis(minBox.size, -minAngle));
-
-            return minimalBoundingBox;
         }
 
-        return {};
+        // rotate axis aligned box back
+
+        auto minimalBoundingBox = Rect(
+            rotateToXAxis(minBox.location, -minAngle),
+            rotateToXAxis(minBox.size, -minAngle));
+
+        return minimalBoundingBox;
     }
 
     // MARK: Utils
@@ -158,7 +156,7 @@ namespace minimal_bounding_box {
     }
 
     double
-    MinimalBoundingBox::angleToAxis(const Segment &s)
+    MinimalBoundingBox::angleToXAxis(const Segment &s)
     {
         auto delta = s.a - s.b;
         return -atan(delta.y / delta.x);

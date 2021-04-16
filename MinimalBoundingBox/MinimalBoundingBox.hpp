@@ -96,7 +96,7 @@ namespace minimal_bounding_box {
 
         static std::vector<Point> monotoneChainConvexHull(const std::vector<Point> &points);
 
-        static double angleToAxis(const Segment &s);
+        static double angleToXAxis(const Segment &s);
 
         static Point rotateToXAxis(const Point &p, double angle);
 
