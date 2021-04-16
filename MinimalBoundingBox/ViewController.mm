@@ -6,8 +6,12 @@
 //
 
 #import "ViewController.h"
+#import "DrawingView.h"
 
 @interface ViewController ()
+
+@property (strong, nonatomic) IBOutlet DrawingView *drawingView;
+
 
 @end
 
@@ -18,5 +22,14 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.drawingView calculateMinimalBoundingBox];
+}
+
+- (IBAction)minimalBoundingBoxButtonTouchUpInside:(UIButton *)sender
+{
+    [self.drawingView calculateMinimalBoundingBox];
+}
 
 @end

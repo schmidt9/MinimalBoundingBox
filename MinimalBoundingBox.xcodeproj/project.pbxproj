@@ -13,6 +13,7 @@
 		CE104BB22629B046005BAEA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE104BB12629B046005BAEA1 /* Assets.xcassets */; };
 		CE104BB52629B046005BAEA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE104BB32629B046005BAEA1 /* LaunchScreen.storyboard */; };
 		CE104BB82629B046005BAEA1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE104BB72629B046005BAEA1 /* main.m */; };
+		CE104BC42629B1CC005BAEA1 /* DrawingView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE104BC32629B1CC005BAEA1 /* DrawingView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		CE104BB42629B046005BAEA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE104BB62629B046005BAEA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE104BB72629B046005BAEA1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CE104BC22629B1CC005BAEA1 /* DrawingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawingView.h; sourceTree = "<group>"; };
+		CE104BC32629B1CC005BAEA1 /* DrawingView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DrawingView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 				CE104BB32629B046005BAEA1 /* LaunchScreen.storyboard */,
 				CE104BB62629B046005BAEA1 /* Info.plist */,
 				CE104BB72629B046005BAEA1 /* main.m */,
+				CE104BC22629B1CC005BAEA1 /* DrawingView.h */,
+				CE104BC32629B1CC005BAEA1 /* DrawingView.mm */,
 			);
 			path = MinimalBoundingBox;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 				CE104BAD2629B046005BAEA1 /* ViewController.mm in Sources */,
 				CE104BA72629B046005BAEA1 /* AppDelegate.m in Sources */,
 				CE104BB82629B046005BAEA1 /* main.m in Sources */,
+				CE104BC42629B1CC005BAEA1 /* DrawingView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

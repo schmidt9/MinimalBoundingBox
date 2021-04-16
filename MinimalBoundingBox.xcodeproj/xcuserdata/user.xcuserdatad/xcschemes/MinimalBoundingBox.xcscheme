@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   version = "1.3">
+   <BuildAction>
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForRunning = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CE104BA12629B046005BAEA1"
+               BuildableName = "MinimalBoundingBox.app"
+               BlueprintName = "MinimalBoundingBox"
+               ReferencedContainer = "container:MinimalBoundingBox.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <LaunchAction
+      useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Debug"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "CE104BA12629B046005BAEA1"
+            BuildableName = "MinimalBoundingBox.app"
+            BlueprintName = "MinimalBoundingBox"
+            ReferencedContainer = "container:MinimalBoundingBox.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+</Scheme>
