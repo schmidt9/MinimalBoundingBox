@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36EBCE426603CA91C098D3C4 /* MinimalBoundingBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC4DFCA41A0C7DB1F8D2F /* MinimalBoundingBox.cpp */; };
 		CE104BA72629B046005BAEA1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE104BA62629B046005BAEA1 /* AppDelegate.m */; };
 		CE104BAD2629B046005BAEA1 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE104BAC2629B046005BAEA1 /* ViewController.mm */; };
 		CE104BB02629B046005BAEA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE104BAE2629B046005BAEA1 /* Main.storyboard */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		36EBC4DFCA41A0C7DB1F8D2F /* MinimalBoundingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MinimalBoundingBox.cpp; sourceTree = "<group>"; };
+		36EBC6CF7FF9B05953AEB156 /* MinimalBoundingBox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MinimalBoundingBox.hpp; sourceTree = "<group>"; };
 		CE104BA22629B046005BAEA1 /* MinimalBoundingBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MinimalBoundingBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE104BA52629B046005BAEA1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE104BA62629B046005BAEA1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 				CE104BB72629B046005BAEA1 /* main.m */,
 				CE104BC22629B1CC005BAEA1 /* DrawingView.h */,
 				CE104BC32629B1CC005BAEA1 /* DrawingView.mm */,
+				36EBC4DFCA41A0C7DB1F8D2F /* MinimalBoundingBox.cpp */,
+				36EBC6CF7FF9B05953AEB156 /* MinimalBoundingBox.hpp */,
 			);
 			path = MinimalBoundingBox;
 			sourceTree = "<group>";
@@ -149,6 +154,7 @@
 				CE104BA72629B046005BAEA1 /* AppDelegate.m in Sources */,
 				CE104BB82629B046005BAEA1 /* main.m in Sources */,
 				CE104BC42629B1CC005BAEA1 /* DrawingView.mm in Sources */,
+				36EBCE426603CA91C098D3C4 /* MinimalBoundingBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

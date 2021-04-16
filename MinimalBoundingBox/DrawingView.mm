@@ -14,14 +14,12 @@ const CGFloat kPointSize = 10.0;
     NSMutableArray<NSValue *> *_points;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (void)awakeFromNib
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.layer.borderColor = [UIColor redColor].CGColor;
-        self.layer.borderWidth = 1;
-    }
-    return self;
+    [super awakeFromNib];
+
+    self.layer.borderColor = [UIColor redColor].CGColor;
+    self.layer.borderWidth = 1;
 }
 
 - (void)drawRect:(CGRect)rect
