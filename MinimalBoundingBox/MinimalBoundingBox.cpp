@@ -142,7 +142,7 @@ namespace minimal_bounding_box {
 
         // iterate for upperHull
 
-        for (unsigned long i = pointLength - 2, j = counter + 1; i >= 0; i--) {
+        for (int i = (int) pointLength - 2, j = counter + 1; i >= 0; i--) {
             while (counter >= j && cross(hullPoints[counter - 2], hullPoints[counter - 1], sortedPoints[i]) <= 0) {
                 counter--;
             }
@@ -161,7 +161,7 @@ namespace minimal_bounding_box {
     MinimalBoundingBox::angleToAxis(const Segment &s)
     {
         auto delta = s.a - s.b;
-        return atan(delta.y / delta.x);
+        return -atan(delta.y / delta.x);
     }
 
     MinimalBoundingBox::Point
