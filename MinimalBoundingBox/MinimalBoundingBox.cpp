@@ -10,7 +10,7 @@ namespace minimal_bounding_box {
     /**
      * Calculates the minimum bounding box
      */
-    MinimalBoundingBox::Rect
+    MinimalBoundingBox::BoundingBox
     MinimalBoundingBox::calculate(const std::vector<Point> &points)
     {
         // calculate the convex hull
@@ -73,7 +73,7 @@ namespace minimal_bounding_box {
             rotateToXAxis(minBox.location, -minAngle),
             rotateToXAxis(minBox.size, -minAngle));
 
-        return minimalBoundingBox;
+        return {minimalBoundingBox, hullPoints};
     }
 
     // MARK: Utils
@@ -123,7 +123,7 @@ namespace minimal_bounding_box {
             return (p1.x < p2.x);
         });
 
-        auto hullPoints = std::vector<Point>(sortedPoints.size() * 2);
+        auto hullPoints = std::vector<Point>(sortedPoints.size());
 
         auto pointLength = sortedPoints.size();
         auto counter = 0;
@@ -150,7 +150,7 @@ namespace minimal_bounding_box {
 
         // remove duplicate start points
 
-        hullPoints.erase(hullPoints.end() - 1);
+        hullPoints.erase(hullPoints.begin() + counter, hullPoints.end());
 
         return hullPoints;
     }

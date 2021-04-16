@@ -84,9 +84,14 @@ namespace minimal_bounding_box {
 
         };
 
+        struct BoundingBox {
+            Rect rect;
+            std::vector<Point> hullPoints;
+        };
+
     public:
 
-        static Rect calculate(const std::vector<Point> &points);
+        static BoundingBox calculate(const std::vector<Point> &points);
 
     private:
 
