@@ -11,7 +11,7 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
-const int kPointsCount = 15;
+const int kPointsCount = 10;
 
 
 @implementation DrawingView
@@ -40,9 +40,8 @@ const int kPointsCount = 15;
 
     // draw points
 
-    [UIColor.magentaColor setFill];
-
     for (NSValue *value in _points) {
+        [UIColor.magentaColor setFill];
         CGPoint point = value.CGPointValue;
         CGRect pointRect = CGRectMake(
             point.x - kPointSize / 2,
@@ -51,6 +50,11 @@ const int kPointsCount = 15;
             kPointSize);
         path = [UIBezierPath bezierPathWithOvalInRect:pointRect];
         [path fill];
+
+        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:10]};
+        NSString *str = [NSString stringWithFormat:@"(%.02f;%.02f)", point.x, point.y];
+        NSAttributedString *text = [[NSAttributedString alloc] initWithString:str attributes:attributes];
+        [text drawAtPoint:point];
     }
 
     // draw bounding box
@@ -67,6 +71,9 @@ const int kPointsCount = 15;
             [path addLineToPoint:point];
         }
     }
+
+    [path closePath];
+    [path stroke];
 
     // draw hull path
 
@@ -108,6 +115,10 @@ const int kPointsCount = 15;
         CGPoint point = CGPointMake(x, y);
         [_points addObject:[NSValue valueWithCGPoint:point]];
     }
+
+//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(80, 80)]];
+//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(150, 90)]];
+//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(120, 200)]];
 }
 
 - (void)calculateBoundingBox
@@ -121,7 +132,7 @@ const int kPointsCount = 15;
     }
 
     auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints);
-    auto cppBoundingBoxPoints = cppBoundingBox.rect.getPoints();
+    auto cppBoundingBoxPoints = cppBoundingBox.boundingPoints;
 
     NSLog(@"%@", NSStringFromCGRect(self.frame));
 

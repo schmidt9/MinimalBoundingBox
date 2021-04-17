@@ -54,11 +54,4 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="AppleRunConfiguration">
-        <watch expression="hullPoints" />
-      </configuration>
-    </watches-manager>
-  </component>
 </project>
