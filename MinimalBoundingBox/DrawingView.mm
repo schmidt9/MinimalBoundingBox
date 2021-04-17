@@ -11,7 +11,7 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
-const int kPointsCount = 10;
+const int kPointsCount = 3;
 
 
 @implementation DrawingView
@@ -72,7 +72,11 @@ const int kPointsCount = 10;
         }
     }
 
-    [path closePath];
+    if (_boundingBoxPoints) {
+        // avoid warning on closing empty path
+        [path closePath];
+    }
+
     [path stroke];
 
     // draw hull path
@@ -109,16 +113,16 @@ const int kPointsCount = 10;
     _pointsDrawingRect = CGRectMake(margin, margin, drawingWidth, drawingHeight);
     _points = [NSMutableArray new];
 
-    for (int i = 0; i < kPointsCount; ++i) {
-        CGFloat x = arc4random_uniform((uint32_t)drawingWidth) + margin;
-        CGFloat y = arc4random_uniform((uint32_t)drawingHeight) + margin;
-        CGPoint point = CGPointMake(x, y);
-        [_points addObject:[NSValue valueWithCGPoint:point]];
-    }
+//    for (int i = 0; i < kPointsCount; ++i) {
+//        CGFloat x = arc4random_uniform((uint32_t)drawingWidth) + margin;
+//        CGFloat y = arc4random_uniform((uint32_t)drawingHeight) + margin;
+//        CGPoint point = CGPointMake(x, y);
+//        [_points addObject:[NSValue valueWithCGPoint:point]];
+//    }
 
-//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(80, 80)]];
-//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(150, 90)]];
-//    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(120, 200)]];
+    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(142, 78)]];
+    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(99, 402)]];
+    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(104, 213)]];
 }
 
 - (void)calculateBoundingBox
@@ -134,7 +138,7 @@ const int kPointsCount = 10;
     auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints);
     auto cppBoundingBoxPoints = cppBoundingBox.boundingPoints;
 
-    NSLog(@"%@", NSStringFromCGRect(self.frame));
+    NSLog(@"BOUNDING BOX POINTS");
 
     _boundingBoxPoints = [NSMutableArray new];
 
@@ -144,9 +148,10 @@ const int kPointsCount = 10;
         NSLog(@"%@", NSStringFromCGPoint(point));
     }
 
+    NSLog(@"HULL POINTS");
+
     _hullPoints = [NSMutableArray new];
     auto cppHullPoints = cppBoundingBox.hullPoints;
-    NSLog(@"HULL POINTS");
 
     for (auto &cppPoint : cppHullPoints) {
         CGPoint point = CGPointMake(cppPoint.x, cppPoint.y);
