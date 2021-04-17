@@ -36,10 +36,10 @@ namespace minimal_bounding_box {
 
             // min / max points
 
-            auto top = DBL_MIN;
+            auto top = DBL_MAX * -1;
             auto bottom = DBL_MAX;
             auto left = DBL_MAX;
-            auto right = DBL_MIN;
+            auto right = DBL_MAX * -1;
 
             // get angle of segment to x axis
 

@@ -11,7 +11,7 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
-const int kPointsCount = 3;
+const int kPointsCount = 10;
 
 
 @implementation DrawingView
@@ -113,16 +113,12 @@ const int kPointsCount = 3;
     _pointsDrawingRect = CGRectMake(margin, margin, drawingWidth, drawingHeight);
     _points = [NSMutableArray new];
 
-//    for (int i = 0; i < kPointsCount; ++i) {
-//        CGFloat x = arc4random_uniform((uint32_t)drawingWidth) + margin;
-//        CGFloat y = arc4random_uniform((uint32_t)drawingHeight) + margin;
-//        CGPoint point = CGPointMake(x, y);
-//        [_points addObject:[NSValue valueWithCGPoint:point]];
-//    }
-
-    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(142, 78)]];
-    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(99, 402)]];
-    [_points addObject:[NSValue valueWithCGPoint:CGPointMake(104, 213)]];
+    for (int i = 0; i < kPointsCount; ++i) {
+        CGFloat x = arc4random_uniform((uint32_t)drawingWidth) + margin;
+        CGFloat y = arc4random_uniform((uint32_t)drawingHeight) + margin;
+        CGPoint point = CGPointMake(x, y);
+        [_points addObject:[NSValue valueWithCGPoint:point]];
+    }
 }
 
 - (void)calculateBoundingBox
