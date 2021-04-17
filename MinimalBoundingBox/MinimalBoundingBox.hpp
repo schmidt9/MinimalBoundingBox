@@ -10,10 +10,11 @@
 namespace minimal_bounding_box {
 
     /**
-    * Port from
-    * https://github.com/cansik/LongLiveTheSquare/blob/master/U4LongLiveTheSquare/Geometry/GeoAlgos.cs
-    * https://github.com/cansik/LongLiveTheSquare/blob/8aab5069763c0e1d8c451195d8855cb713aee48b/U4LongLiveTheSquare/MinimalBoundingBox.cs
-    */
+     * Port from
+     * https://github.com/cansik/LongLiveTheSquare
+     * https://github.com/cansik/LongLiveTheSquare/blob/master/U4LongLiveTheSquare/Geometry/GeoAlgos.cs
+     * https://github.com/cansik/LongLiveTheSquare/blob/8aab5069763c0e1d8c451195d8855cb713aee48b /U4LongLiveTheSquare/MinimalBoundingBox.cs
+     */
     class MinimalBoundingBox {
 
     public:
@@ -28,6 +29,11 @@ namespace minimal_bounding_box {
             {
                 this->x = x;
                 this->y = y;
+            }
+
+            inline Point operator + (const Point &other) const
+            {
+                return {this->x + other.x, this->y + other.y};
             }
 
             inline Point operator - (const Point &other) const
@@ -72,7 +78,7 @@ namespace minimal_bounding_box {
                 return size.x * size.y;
             }
 
-            std::vector<Point> getPoints()
+            std::vector<Point> getPoints() const
             {
                 return {
                     {location.x, location.y},
@@ -85,7 +91,7 @@ namespace minimal_bounding_box {
         };
 
         struct BoundingBox {
-            Rect rect;
+            std::vector<Point> boundingPoints;
             std::vector<Point> hullPoints;
         };
 

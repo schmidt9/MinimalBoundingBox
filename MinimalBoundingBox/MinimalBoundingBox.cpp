@@ -44,6 +44,7 @@ namespace minimal_bounding_box {
             // get angle of segment to x axis
 
             auto angle = angleToXAxis(segment);
+            printf("POINT (%f;%f) DEG %f\n", current.x, current.y, angle * (180 / M_PI));
 
             // rotate every point and get min and max values for each direction
 
@@ -69,11 +70,13 @@ namespace minimal_bounding_box {
 
         // rotate axis aligned box back
 
-        auto minimalBoundingBox = Rect(
-            rotateToXAxis(minBox.location, -minAngle),
-            rotateToXAxis(minBox.size, -minAngle));
+        auto minBoxPoints = minBox.getPoints();
 
-        return {minimalBoundingBox, hullPoints};
+        for (auto &point : minBoxPoints) {
+            point = rotateToXAxis(point, -minAngle);
+        }
+
+        return {minBoxPoints, hullPoints};
     }
 
     // MARK: Utils
