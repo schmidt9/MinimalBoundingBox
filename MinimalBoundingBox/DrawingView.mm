@@ -12,6 +12,7 @@ using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
 const int kPointsCount = 10;
+const CGFloat kAlignmentTolerance = 5.0;
 
 
 double
@@ -70,7 +71,7 @@ normalizeDegrees(double degrees, double maxDegrees)
         path = [UIBezierPath bezierPathWithOvalInRect:pointRect];
         [path fill];
 
-        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:10]};
+        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:8]};
         NSString *str = [NSString stringWithFormat:@"(%.02f;%.02f)", point.x, point.y];
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:str attributes:attributes];
         [text drawAtPoint:point];
@@ -116,14 +117,15 @@ normalizeDegrees(double degrees, double maxDegrees)
     // draw angle string
 
     NSString *angleString = [NSString stringWithFormat:
-        @"Bounding box:\nwidth %f height %f\nwidth angle to X axis %f\nheight angle to X axis %f\nis aligned %@",
+        @"Bounding box:\nwidth %f height %f\nwidth angle to X axis %f deg\nheight angle to X axis %f deg\nis aligned (using tolerance %f deg) %@",
         _boundingBoxWidth,
         _boundingBoxHeight,
         _widthAngle * (180 / M_PI),
         _heightAngle * (180 / M_PI),
+        kAlignmentTolerance,
         _isAligned ? @"YES" : @"NO"];
-    NSAttributedString *angleAttributedString = [[NSAttributedString alloc] initWithString:angleString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10]}];
-    [angleAttributedString drawAtPoint:CGPointMake(4, 8)];
+    NSAttributedString *angleAttributedString = [[NSAttributedString alloc] initWithString:angleString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:8]}];
+    [angleAttributedString drawAtPoint:CGPointMake(4, 4)];
 
     [path stroke];
 }
@@ -162,7 +164,7 @@ normalizeDegrees(double degrees, double maxDegrees)
         cppPoints.push_back(cppPoint);
     }
 
-    auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints, 5.0);
+    auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints, kAlignmentTolerance);
     auto cppBoundingBoxPoints = cppBoundingBox.boundingPoints;
 
     NSLog(@"BOUNDING BOX POINTS");
