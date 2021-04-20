@@ -11,7 +11,7 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
-const int kPointsCount = 3;
+const int kPointsCount = 10;
 
 
 double
