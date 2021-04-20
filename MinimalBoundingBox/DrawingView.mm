@@ -11,14 +11,29 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
-const int kPointsCount = 10;
+const int kPointsCount = 3;
 
+
+double
+normalizeDegrees(double degrees, double maxDegrees)
+{
+    degrees = fmod(degrees, maxDegrees);
+
+    if (degrees >= maxDegrees) {
+        degrees -= maxDegrees;
+    } else if (degrees < 0) {
+        degrees += maxDegrees;
+    }
+
+    return abs(fmod(degrees, maxDegrees)); // avoid -0 and 360
+}
 
 @implementation DrawingView
 {
     NSMutableArray<NSValue *> *_points;
     NSMutableArray<NSValue *> *_boundingBoxPoints;
     NSMutableArray<NSValue *> *_hullPoints;
+    double _rotationAngle;
     CGRect _pointsDrawingRect;
 }
 
@@ -94,6 +109,22 @@ const int kPointsCount = 10;
         }
     }
 
+    // draw angle string
+
+    double degrees = (_rotationAngle) * (180 / M_PI);
+    NSLog(@"DEG PRE %s %f", __func__, degrees);
+
+    if (degrees >= 0) {
+        degrees = 90 - degrees;
+    } else {
+        degrees = 360 - (degrees + 90);
+    }
+
+    NSLog(@"DEG POST %s %f", __func__, degrees);
+    NSString *angleString = [NSString stringWithFormat:@"Bounding box rotation angle\n%f rad (%f deg)", _rotationAngle, degrees];
+    NSAttributedString *angleAttributedString = [[NSAttributedString alloc] initWithString:angleString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10]}];
+    [angleAttributedString drawAtPoint:CGPointMake(20, 20)];
+
     [path stroke];
 }
 
@@ -154,6 +185,8 @@ const int kPointsCount = 10;
         [_hullPoints addObject:[NSValue valueWithCGPoint:point]];
         NSLog(@"%@", NSStringFromCGPoint(point));
     }
+
+    _rotationAngle = cppBoundingBox.rotationAngle;
 }
 
 @end
