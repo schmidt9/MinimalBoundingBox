@@ -33,10 +33,11 @@ normalizeDegrees(double degrees, double maxDegrees)
     NSMutableArray<NSValue *> *_points;
     NSMutableArray<NSValue *> *_boundingBoxPoints;
     NSMutableArray<NSValue *> *_hullPoints;
-    double _widthAngle;
-    double _heightAngle;
     double _boundingBoxWidth;
     double _boundingBoxHeight;
+    double _widthAngle;
+    double _heightAngle;
+    bool _isAligned;
     CGRect _pointsDrawingRect;
 }
 
@@ -115,11 +116,12 @@ normalizeDegrees(double degrees, double maxDegrees)
     // draw angle string
 
     NSString *angleString = [NSString stringWithFormat:
-        @"Bounding box:\nwidth %f height %f\nwidth angle to X axis %f\nheight angle to X axis %f",
+        @"Bounding box:\nwidth %f height %f\nwidth angle to X axis %f\nheight angle to X axis %f\nis aligned %@",
         _boundingBoxWidth,
         _boundingBoxHeight,
         _widthAngle * (180 / M_PI),
-        _heightAngle * (180 / M_PI)];
+        _heightAngle * (180 / M_PI),
+        _isAligned ? @"YES" : @"NO"];
     NSAttributedString *angleAttributedString = [[NSAttributedString alloc] initWithString:angleString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10]}];
     [angleAttributedString drawAtPoint:CGPointMake(4, 8)];
 
@@ -160,7 +162,7 @@ normalizeDegrees(double degrees, double maxDegrees)
         cppPoints.push_back(cppPoint);
     }
 
-    auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints);
+    auto cppBoundingBox = MinimalBoundingBox::calculate(cppPoints, 5.0);
     auto cppBoundingBoxPoints = cppBoundingBox.boundingPoints;
 
     NSLog(@"BOUNDING BOX POINTS");
@@ -188,6 +190,7 @@ normalizeDegrees(double degrees, double maxDegrees)
     _heightAngle = cppBoundingBox.heightAngle;
     _boundingBoxWidth = cppBoundingBox.width;
     _boundingBoxHeight = cppBoundingBox.height;
+    _isAligned = cppBoundingBox.isAligned;
 }
 
 @end

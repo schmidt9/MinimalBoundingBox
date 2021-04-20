@@ -9,9 +9,10 @@ namespace minimal_bounding_box {
 
     /**
      * Calculates the minimum bounding box
+     * @param alignmentTolerance Tolerance in degrees for isAligned property of BoundingBox
      */
     MinimalBoundingBox::BoundingBox
-    MinimalBoundingBox::calculate(const std::vector<Point> &points)
+    MinimalBoundingBox::calculate(const std::vector<Point> &points, double alignmentTolerance)
     {
         // calculate the convex hull
 
@@ -97,7 +98,10 @@ namespace minimal_bounding_box {
         auto heightAngle = angleToXAxis(Segment(heightPoint1, heightPoint2));
         auto widthAngle = (heightAngle > 0) ? heightAngle - M_PI_2 : heightAngle + M_PI_2;
 
-        return {minBoxPoints, hullPoints, width, height, widthAngle, heightAngle};
+        auto tolerance = alignmentTolerance * (M_PI / 180);
+        auto isAligned = (widthAngle <= tolerance && widthAngle >= -tolerance);
+
+        return {minBoxPoints, hullPoints, width, height, widthAngle, heightAngle, isAligned};
     }
 
     // MARK: Utils

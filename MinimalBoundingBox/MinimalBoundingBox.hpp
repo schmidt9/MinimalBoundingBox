@@ -105,11 +105,13 @@ namespace minimal_bounding_box {
             // positive value means box orientation from bottom left to top right,
             // negative value means opposite
             double heightAngle;
+            // weather the box is aligned to axes (widthAngle is 0 and height angle is 90)
+            bool isAligned;
         };
 
     public:
 
-        static BoundingBox calculate(const std::vector<Point> &points);
+        static BoundingBox calculate(const std::vector<Point> &points, double alignmentTolerance = 0.0);
 
     private:
 
