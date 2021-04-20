@@ -93,8 +93,18 @@ namespace minimal_bounding_box {
         struct BoundingBox {
             std::vector<Point> boundingPoints;
             std::vector<Point> hullPoints;
-            // rotation angle of bounding box in radians
-            double rotationAngle;
+            // smaller box side
+            double width;
+            // larger box side
+            double height;
+            // angle between smaller box side and X axis in radians,
+            // positive value means box orientation from bottom right to top left,
+            // negative value means opposite
+            double widthAngle;
+            // angle between larger box side and X axis in radians
+            // positive value means box orientation from bottom left to top right,
+            // negative value means opposite
+            double heightAngle;
         };
 
     public:

@@ -33,7 +33,10 @@ normalizeDegrees(double degrees, double maxDegrees)
     NSMutableArray<NSValue *> *_points;
     NSMutableArray<NSValue *> *_boundingBoxPoints;
     NSMutableArray<NSValue *> *_hullPoints;
-    double _rotationAngle;
+    double _widthAngle;
+    double _heightAngle;
+    double _boundingBoxWidth;
+    double _boundingBoxHeight;
     CGRect _pointsDrawingRect;
 }
 
@@ -111,19 +114,14 @@ normalizeDegrees(double degrees, double maxDegrees)
 
     // draw angle string
 
-    double degrees = (_rotationAngle) * (180 / M_PI);
-    NSLog(@"DEG PRE %s %f", __func__, degrees);
-
-    if (degrees >= 0) {
-        degrees = 90 - degrees;
-    } else {
-        degrees = 360 - (degrees + 90);
-    }
-
-    NSLog(@"DEG POST %s %f", __func__, degrees);
-    NSString *angleString = [NSString stringWithFormat:@"Bounding box rotation angle\n%f rad (%f deg)", _rotationAngle, degrees];
+    NSString *angleString = [NSString stringWithFormat:
+        @"Bounding box:\nwidth %f height %f\nwidth angle to X axis %f\nheight angle to X axis %f",
+        _boundingBoxWidth,
+        _boundingBoxHeight,
+        _widthAngle * (180 / M_PI),
+        _heightAngle * (180 / M_PI)];
     NSAttributedString *angleAttributedString = [[NSAttributedString alloc] initWithString:angleString attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:10]}];
-    [angleAttributedString drawAtPoint:CGPointMake(20, 20)];
+    [angleAttributedString drawAtPoint:CGPointMake(4, 8)];
 
     [path stroke];
 }
@@ -186,7 +184,10 @@ normalizeDegrees(double degrees, double maxDegrees)
         NSLog(@"%@", NSStringFromCGPoint(point));
     }
 
-    _rotationAngle = cppBoundingBox.rotationAngle;
+    _widthAngle = cppBoundingBox.widthAngle;
+    _heightAngle = cppBoundingBox.heightAngle;
+    _boundingBoxWidth = cppBoundingBox.width;
+    _boundingBoxHeight = cppBoundingBox.height;
 }
 
 @end
