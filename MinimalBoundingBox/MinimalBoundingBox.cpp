@@ -76,7 +76,7 @@ namespace minimal_bounding_box {
             point = rotateToXAxis(point, -minAngle);
         }
 
-        return {minBoxPoints, hullPoints};
+        return {minBoxPoints, hullPoints, minAngle};
     }
 
     // MARK: Utils

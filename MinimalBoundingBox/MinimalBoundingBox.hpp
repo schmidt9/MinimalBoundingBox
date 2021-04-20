@@ -93,6 +93,8 @@ namespace minimal_bounding_box {
         struct BoundingBox {
             std::vector<Point> boundingPoints;
             std::vector<Point> hullPoints;
+            // rotation angle of bounding box in radians
+            double rotationAngle;
         };
 
     public:
