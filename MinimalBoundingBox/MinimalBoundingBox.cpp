@@ -75,10 +75,10 @@ namespace minimal_bounding_box {
 
         auto v1 = minBoxPoints[0] - minBoxPoints[1];
         auto v2 = minBoxPoints[1] - minBoxPoints[2];
-        printf("V1 (%f,%f) V2 (%f,%f)\n", v1.x, v1.y, v2.x, v2.y);
-
-        auto width = std::min(abs(v1.x), abs(v2.y));
-        auto height = std::max(abs(v1.x), abs(v2.y));
+        auto absX = abs(v1.x);
+        auto absY = abs(v2.y);
+        auto width = std::min(absX, absY);
+        auto height = std::max(absX, absY);
 
         // rotate axis aligned box back
 
@@ -87,18 +87,15 @@ namespace minimal_bounding_box {
         }
 
 
-        auto heightPoint1 = (abs(v1.x) > abs(v2.y))
+        auto heightPoint1 = (absX > absY)
                             ? minBoxPoints[0]
                             : minBoxPoints[1];
-        auto heightPoint2 = (abs(v1.x) > abs(v2.y))
+        auto heightPoint2 = (absX > absY)
                             ? minBoxPoints[1]
                             : minBoxPoints[2];
 
-        auto a1 = angleToXAxis(Segment(minBoxPoints[0], minBoxPoints[1]));
-        auto a2 = angleToXAxis(Segment(minBoxPoints[1], minBoxPoints[2]));
         auto heightAngle = angleToXAxis(Segment(heightPoint1, heightPoint2));
         auto widthAngle = (heightAngle > 0) ? heightAngle - M_PI_2 : heightAngle + M_PI_2;
-        printf("A1 %f A2 %f HEIGHT A %f WIDTH A %f\n", a1 * (180 /M_PI), a2 * (180 /M_PI), heightAngle * (180 /M_PI), widthAngle * (180 /M_PI));
 
         return {minBoxPoints, hullPoints, width, height, widthAngle, heightAngle};
     }
