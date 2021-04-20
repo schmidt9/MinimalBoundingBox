@@ -2,4 +2,4 @@ This is a minimal bounding box example rewritten using C++ from [LongLiveTheSqua
 
 Blue is points drawing area, gray is hull, green is bounding box
 
-![screenshot](screenshot.png)
+![screenshot](screenshot.PNG)
