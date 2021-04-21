@@ -11,6 +11,7 @@
 using namespace minimal_bounding_box;
 
 const CGFloat kPointSize = 10.0;
+const CGFloat kCenterSize = 5.0;
 const int kPointsCount = 10;
 const CGFloat kAlignmentTolerance = 5.0;
 
@@ -40,6 +41,7 @@ normalizeDegrees(double degrees, double maxDegrees)
     double _heightAngle;
     bool _isAligned;
     CGRect _pointsDrawingRect;
+    CGPoint _boundingBoxCenter;
 }
 
 - (void)awakeFromNib
@@ -113,6 +115,12 @@ normalizeDegrees(double degrees, double maxDegrees)
             [path addLineToPoint:point];
         }
     }
+
+    // draw center
+
+    [UIColor.redColor setFill];
+    path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(_boundingBoxCenter.x - kCenterSize / 2, _boundingBoxCenter.y - kCenterSize / 2, kCenterSize, kCenterSize)];
+    [path fill];
 
     // draw angle string
 
@@ -193,6 +201,8 @@ normalizeDegrees(double degrees, double maxDegrees)
     _boundingBoxWidth = cppBoundingBox.width;
     _boundingBoxHeight = cppBoundingBox.height;
     _isAligned = cppBoundingBox.isAligned;
+
+    _boundingBoxCenter = CGPointMake(cppBoundingBox.center.x, cppBoundingBox.center.y);
 }
 
 @end

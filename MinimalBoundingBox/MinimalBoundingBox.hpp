@@ -93,6 +93,7 @@ namespace minimal_bounding_box {
         struct BoundingBox {
             std::vector<Point> boundingPoints;
             std::vector<Point> hullPoints;
+            Point center;
             // smaller box side
             double width;
             // larger box side

@@ -81,12 +81,20 @@ namespace minimal_bounding_box {
         auto width = std::min(absX, absY);
         auto height = std::max(absX, absY);
 
-        // rotate axis aligned box back
+        // rotate axis aligned box back and get center
+
+        auto sumX = 0.0;
+        auto sumY = 0.0;
 
         for (auto &point : minBoxPoints) {
             point = rotateToXAxis(point, -minAngle);
+            sumX += point.x;
+            sumY += point.y;
         }
 
+        auto center = Point(sumX / 4, sumY / 4);
+
+        // get angles
 
         auto heightPoint1 = (absX > absY)
                             ? minBoxPoints[0]
@@ -98,10 +106,21 @@ namespace minimal_bounding_box {
         auto heightAngle = angleToXAxis(Segment(heightPoint1, heightPoint2));
         auto widthAngle = (heightAngle > 0) ? heightAngle - M_PI_2 : heightAngle + M_PI_2;
 
+        // get alignment
+
         auto tolerance = alignmentTolerance * (M_PI / 180);
         auto isAligned = (widthAngle <= tolerance && widthAngle >= -tolerance);
 
-        return {minBoxPoints, hullPoints, width, height, widthAngle, heightAngle, isAligned};
+        return {
+            minBoxPoints,
+            hullPoints,
+            center,
+            width,
+            height,
+            widthAngle,
+            heightAngle,
+            isAligned
+        };
     }
 
     // MARK: Utils
